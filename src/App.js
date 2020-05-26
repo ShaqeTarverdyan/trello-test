@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import firebase from "./firebase/index";
+import Home from "./components/Home";
+import Authentication from "./components/Authentication";
 
-function App() {
-  return <div className="App">hello React</div>;
-}
+const App = (props) => {
+  return props.userName != null ? <Home /> : <Authentication />;
+};
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    userName: state.userName,
+  };
+};
+export default connect(mapStateToProps)(App);
