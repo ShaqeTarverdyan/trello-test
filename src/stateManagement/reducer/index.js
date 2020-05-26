@@ -1,4 +1,7 @@
+import firebase from "../../firebase/index";
 const initialState = {
+  userName: null,
+  isSignIn: false,
   listName: "shaqe-test",
   cardName: "",
   editCardName: "",
@@ -6,16 +9,24 @@ const initialState = {
   keyList: "",
   inputKey: "",
   dataLists: [],
-  dataCards: [],
+  dataCards: ["shaqe"],
   editing: false,
+  errorMessage: "",
 };
 
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
   switch (action.type) {
-    case "TEST_REDUX":
-      const name = action.payload;
-      return { ...newState, listName: name };
+    case "LOGIN_USER":
+      const logInUser = firebase.auth().currentUser;
+      return { ...newState, userName: logInUser.displayName };
+
+    case "LOGOUT":
+      const logOutEvent = action.payload;
+      logOutEvent.preventDefault();
+      firebase.auth().signOut();
+      return { ...newState, userName: null };
+
     default:
       return newState;
   }
