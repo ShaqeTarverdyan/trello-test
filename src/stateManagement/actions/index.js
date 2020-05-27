@@ -19,3 +19,9 @@ export const getLoginUser = () => {
     type: "LOGIN_USER",
   };
 };
+
+export const getUserFromLocalStorage = () => {
+  return {
+    type: "GET_USER_FROM_LOCALSTORAGE",
+  };
+};
