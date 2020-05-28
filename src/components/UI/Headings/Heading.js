@@ -2,6 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const baseStyle = css`
+  color: ${({ color }) => (color ? color : "var(--color-main)")};
   font-weight: ${({ bold }) => (bold ? "700" : "300")};
   margin-top: 0;
   letter-spacing: 1px;
