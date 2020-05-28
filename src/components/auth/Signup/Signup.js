@@ -6,13 +6,19 @@ import { FormWrapper, StyledForm } from "../../../hoc/layout/elements/index";
 import Input from "../../UI/Forms/Input/Input";
 import Button from "../../UI/Forms/Button/Button";
 import Heading from "../../UI/Headings/Heading";
+
 const LoginSchema = Yup.object().shape({
   firstName: Yup.string().min(3, "lalal").max(15, "blblbl"),
   lastName: Yup.string().min(3, "lalal").max(15, "blblbl"),
   email: Yup.string()
     .email("Invalid email.")
     .required("The email is required."),
-  password: Yup.string().required("The passoword is required."),
+  password: Yup.string()
+    .required("The passoword is required.")
+    .min(8, "password is to short"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], `Password does not match`)
+    .required("The password fields must be the same"),
 });
 
 const Signup = () => {
