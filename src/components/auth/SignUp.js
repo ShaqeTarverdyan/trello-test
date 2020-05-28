@@ -1,34 +1,37 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import firebase from "../../firebase/index";
+import { connect } from "react-redux";
 import { getLoginUser } from "../../stateManagement/actions/index";
 
-const SignIn = (props) => {
+const SignUp = (props) => {
   const [user, setUser] = useState({
+    name: "",
     email: "",
     password: "",
   });
 
-  const handleChange = (e) => {
-    return setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  const userSignIn = (e) => {
+  const signUp = (e) => {
+    e.preventDefault();
     firebase
       .auth()
-      .signInWithEmailAndPassword(user.email, user.password)
-      .then(function (result) {
-        props.getLoginUser();
-      })
+      .createUserWithEmailAndPassword(user.email, user.password)
       .catch((err) => {
         console.log(err.message);
       });
-    e.preventDefault();
+  };
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
   return (
     <div>
-      <h3>Sign in</h3>
+      <h3>Sign Up</h3>
       <form>
+        <input
+          placeholder="Name"
+          onChange={handleChange}
+          name="name"
+          type="text"
+        />
         <input
           placeholder="Email"
           onChange={handleChange}
@@ -41,8 +44,8 @@ const SignIn = (props) => {
           name="password"
           type="password"
         />
-        <button type="submit" onClick={userSignIn}>
-          Sign IN
+        <button type="submit" onClick={signUp}>
+          Sign up
         </button>
       </form>
     </div>
@@ -51,8 +54,8 @@ const SignIn = (props) => {
 
 const mapDispatchToState = (dispatch) => {
   return {
-    getLoginUser: () => dispatch(getLoginUser()),
+    getLoginUser: (name) => dispatch(getLoginUser(name)),
   };
 };
 
-export default connect(null, mapDispatchToState)(SignIn);
+export default connect(null, mapDispatchToState)(SignUp);
