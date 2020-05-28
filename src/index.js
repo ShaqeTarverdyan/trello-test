@@ -10,8 +10,9 @@ import { ThemeProvider } from "styled-components";
 import { BrowserRouter } from "react-router-dom";
 
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import store from "./store/index";
+import { isLoaded } from "react-redux-firebase";
 
 // react-redux-firebase config
 const rrfConfig = {
@@ -25,13 +26,22 @@ const rrfProps = {
   // createFirestoreInstance // <- needed if using firestore
 };
 
+//load page until content will appeare
+function AuthIsLoaded({ children }) {
+  const auth = useSelector((state) => state.firebase.auth);
+  if (!isLoaded(auth)) return <div>Loading...</div>;
+  return children;
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <React.StrictMode>
-            <App />
+            <AuthIsLoaded>
+              <App />
+            </AuthIsLoaded>
             <GlobalStyles />
           </React.StrictMode>
         </ThemeProvider>
