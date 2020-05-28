@@ -7,6 +7,7 @@ const theme = {
     textColor: "#333",
     whiteColor: "#fff",
     shadow: "rgba(0,0,0,.2)",
+    errorColor: "#f01d0e",
   },
 
   mediaQueries: {
