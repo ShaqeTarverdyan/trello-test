@@ -1,25 +1,27 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import Layout from "./hoc/layout/Layout";
 import { connect } from "react-redux";
-import Home from "./components/Home";
-import Authentication from "./components/Authentication";
-import { getUserFromLocalStorage } from "./stateManagement/actions/index";
+import Home from "./components/home/Home";
+import Todos from "./components/todos/Todos";
 
 const App = (props) => {
-  useEffect(() => {
-    props.getUserFromLocalStorage();
-  }, []);
-  return props.userName != null ? <Home /> : <Authentication />;
+  return (
+    <Layout>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exct path="/todos" component={Todos} />
+        <Redirect to="/" />
+      </Switch>
+    </Layout>
+  );
 };
 
 const mapStateToProps = (state) => {
-  return {
-    userName: state.userName,
-  };
+  return {};
 };
 
 const mapDistatchToState = (dispatch) => {
-  return {
-    getUserFromLocalStorage: () => dispatch(getUserFromLocalStorage()),
-  };
+  return {};
 };
 export default connect(mapStateToProps, mapDistatchToState)(App);
