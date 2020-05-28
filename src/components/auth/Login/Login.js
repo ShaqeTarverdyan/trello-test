@@ -1,11 +1,15 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useEffect } from "react";
+import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import { FormWrapper, StyledForm } from "../../../hoc/layout/elements/index";
+import { connect } from "react-redux";
+import * as actions from "../../../store/actions/index";
 
 import Input from "../../UI/Forms/Input/Input";
 import Button from "../../UI/Forms/Button/Button";
 import Heading from "../../UI/Headings/Heading";
+import Message from "../../UI/Message/Message";
+
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email.")
@@ -13,7 +17,10 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("The passoword is required."),
 });
 
-const Login = () => {
+const Login = ({ logIn, loading, errorMessage, cleanUp }) => {
+  useEffect(() => {
+    cleanUp();
+  }, []);
   return (
     <div style={{ padding: "3rem" }}>
       <Formik
@@ -22,11 +29,12 @@ const Login = () => {
           password: "",
         }}
         validationSchema={LoginSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
+        onSubmit={async (values, { setSubmitting }) => {
+          await logIn(values);
+          setSubmitting(false);
         }}
       >
-        {({ isSubmutting, isValid }) => (
+        {({ isSubmitting, isValid }) => (
           <FormWrapper>
             <Heading size="h2" color="white">
               Log In
@@ -44,7 +52,16 @@ const Login = () => {
                 placeholder="Your password..."
                 component={Input}
               />
-              <Button type="submit">Submit</Button>
+              <Button
+                disabled={!isValid || isSubmitting}
+                type="submit"
+                loading={loading ? "Logging in " : null}
+              >
+                Login
+              </Button>
+              <Message error show={errorMessage}>
+                {errorMessage}
+              </Message>
             </StyledForm>
           </FormWrapper>
         )}
@@ -53,4 +70,14 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = ({ auth }) => ({
+  loading: auth.loading,
+  errorMessage: auth.errorMessage,
+});
+
+const mapDispatchToProps = {
+  logIn: actions.signIn,
+  cleanUp: actions.cleanUp,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
