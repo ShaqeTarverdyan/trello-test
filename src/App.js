@@ -4,6 +4,8 @@ import Layout from "./hoc/layout/Layout";
 import { connect } from "react-redux";
 import Home from "./components/home/Home";
 import Todos from "./components/todos/Todos";
+import Login from "./components/auth/Login/Login";
+import Signup from "./components/auth/Signup/Signup";
 
 const App = (props) => {
   return (
@@ -11,6 +13,8 @@ const App = (props) => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exct path="/todos" component={Todos} />
+        <Route exct path="/login" component={Login} />
+        <Route exct path="/signup" component={Signup} />
         <Redirect to="/" />
       </Switch>
     </Layout>
