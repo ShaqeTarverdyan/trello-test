@@ -19,11 +19,11 @@ const Wrapper = styled.div`
   justify-content: left;
 `;
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn }) => {
   return (
     <FixedWrapper>
       <Wrapper>
-        <NavItems />
+        <NavItems isLoggedIn={isLoggedIn} />
       </Wrapper>
     </FixedWrapper>
   );
